@@ -1,540 +1,550 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AMCharts with EJS</title>
-  <!-- <link rel="stylesheet" href="/styles.css"> -->
-  <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-  <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
-  <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
-  <script src="https://cdn.amcharts.com/lib/5/patterns.js"></script>
-  <style>
-    :root {
-      font-size: 16px; /* 1rem = 16px */
-    }
-  
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-  
-    .container {
-      position: relative;
-      width: 100%;
-      max-width: 75rem; /* 1200px / 16 */
-      margin: 0 auto;
-      padding: 1.25rem; /* 20px / 16 */
-    }
-  
-    .inner-container {
-      margin-top: 10rem; /* 160px / 16 */
-      margin-left: 8.75rem; /* 140px / 16 */
-    }
-  
-    .chart-heading {
-      text-align: left;
-      font-family: Arial, sans-serif;
-      color: #555fa3;
-      font-weight: bold;
-      margin-left: 0;
-      font-size: 1.25rem; /* 20px / 16 */
-    }
-  
-    .chart-container {
-      width: 80%;
-      height: 18.75rem; /* 300px / 16 */
-      border: 0.125rem solid #cccccc; /* 2px / 16 */
-      border-radius: 0.625rem; /* 10px / 16 */
-      position: relative;
-    }
-  
-    .left-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 62.5rem; /* 1000px / 16 */
-      height: auto;
-      z-index: 1;
-    }
-  
-    .card-report-title {
-      position: absolute;
-      top: 1.875rem; /* 30px / 16 */
-      left: 50%;
-      transform: translateX(-50%);
-      color: white;
-      font-size: 1.5rem; /* 24px / 16 */
-      font-weight: bold;
-      z-index: 2;
-    }
-  
-    table {
-      width: 80%;
-      border-collapse: collapse;
-      margin-bottom: 1.25rem; /* 20px / 16 */
-    }
-  
-    table, th, td {
-      border: 0.125rem solid #cccccc; /* 2px / 16 */
-    }
-  
-    th, td {
-      padding: 0.625rem; /* 10px / 16 */
-      text-align: center;
-    }
-  
-    th {
-      font-weight: 100;
-      background-color: #f4f4f4;
-    }
-  
-    th.green {
-      font-weight: 100;
-      background-color: #28a745;
-      color: white;
-    }
-  
-    th.blue {
-      font-weight: 100;
-      background-color: #007bff;
-      color: white;
-    }
-  
-    th.patterned {
-      font-weight: 100;
-      background-color: white;
-      color: #40189d;
-      background-size: 0.9375rem 0.9375rem; /* 15px / 16 */
-    }
-  
-    th.yellow {
-      font-weight: 100;
-      background-color: #edb50f;
-      color: #40189d;
-    }
-  
-    th.totals {
-      font-weight: 100;
-      background-color: #e9ecef;
-    }
-  
-    td.negative {
-      color: red;
-    }
-  
-    td.totals {
-      background-color: #e9ecef;
-      font-weight: bold;
-    }
-  
-    body, td, th {
-      color: #0e4987;
-    }
-  
-    @media print {
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AMCharts with EJS</title>
+    <!-- <link rel="stylesheet" href="/styles.css"> -->
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/patterns.js"></script>
+    <style>
+      :root {
+        font-size: 16px; /* 1rem = 16px */
+      }
+
       body {
         margin: 0;
         padding: 0;
         font-family: Arial, sans-serif;
       }
-  
+
       .container {
         position: relative;
         width: 100%;
-        max-width: 75rem;
+        max-width: 75rem; /* 1200px / 16 */
         margin: 0 auto;
-        padding: 1.25rem;
+        padding: 1.25rem; /* 20px / 16 */
       }
-  
+
+      .inner-container {
+        margin-top: 10rem; /* 160px / 16 */
+        margin-left: 8.75rem; /* 140px / 16 */
+      }
+
+      .chart-heading {
+        text-align: left;
+        font-family: Arial, sans-serif;
+        color: #555fa3;
+        font-weight: bold;
+        margin-left: 0;
+        font-size: 1.25rem; /* 20px / 16 */
+      }
+
       .chart-container {
-        width: 100%;
-        height: 18.75rem;
-        border: 0.125rem solid #cccccc;
-        border-radius: 0.625rem;
+        width: 80%;
+        height: 18.75rem; /* 300px / 16 */
+        border: 0.125rem solid #cccccc; /* 2px / 16 */
+        border-radius: 0.625rem; /* 10px / 16 */
         position: relative;
       }
-  
-      img.left-image {
-        width: 5rem;
+
+      .card-report-title {
+        position: absolute;
+        top: 1.875rem; /* 30px / 16 */
+        left: 50%;
+        transform: translateX(-50%);
+        color: white;
+        font-size: 1.5rem; /* 24px / 16 */
+        font-weight: bold;
+        z-index: 2;
       }
-    }
-  </style>
-</head>
-<body>
-  <!-- Container for the image and charts -->
-  <div class="container">
-    <div class="inner-container">
-      <div class="card-report-title">Card Report</div>
-      <!-- <img src="report_layout.png" alt="Decorative Image" class="left-image"> -->
-      <h2 class="chart-heading">Monthly Utility Cost Performance 2023</h2>
-      <table>
-        <thead>
-          <tr>
-            <th style="color: #40189d; width: 150px">Savings Achieved</th>
-            <th class="totals">TOTALS</th>
-            <th class="green">Electric (kWh)</th>
-            <th style="background-color: #ee4b1d; color: white">Electric (kW) Demand</th>
-            <th style="background-color: #007bff; color: white">Water</th>
-            <th class="patterned">Sewer</th>
-            <th style="background-color: #edb50f; color: white">Natural Gas</th>
-            <th style="color: #28a745">Electric (Others)</th>
-            <th style="color: #4c73be">Water (Others)</th>
-            <th style="color: #edb50f">N.Gas (Others)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="background-color: #17395f; color: white">Recent Month's Savings</td>
-            <td>$ 1,906</td>
-            <td>$ 1,770</td>
-            <td>$ 46</td>
-            <td>$ 90</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-          </tr>
-          <tr>
-            <td style="background-color: #17395f; color: white">Cumulative Prior Months' Savings</td>
-            <td>$ 3,386</td>
-            <td>$ 1,102</td>
-            <td>$ 416</td>
-            <td>$ 10</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-            <td class="negative">$ -53</td>
-          </tr>
-          <tr class="totals">
-            <td style="background-color: #17395f; color: white">Total Savings Received To Date</td>
-            <td>$ 5,291</td>
-            <td>$ 2,871</td>
-            <td>$ 462</td>
-            <td>$ 10</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-            <td class="negative">$ -53</td>
-          </tr>
-          <tr>
-            <td style="background-color: #17395f; color: white">% Savings To Date</td>
-            <td>5%</td>
-            <td>5%</td>
-            <td>5%</td>
-            <td>5%</td>
-            <td>5%</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-            <td>$ 0</td>
-          </tr>
-        </tbody>
-      </table>
 
-      <!-- Heading for the first chart -->
-      <h2 class="chart-heading">Monthly Utility Cost Performance 2023</h2>
-      <div id="chartdiv1" class="chart-container"></div>
+      table {
+        width: 80%;
+        border-collapse: collapse;
+        margin-bottom: 1.25rem; /* 20px / 16 */
+      }
 
-      <!-- Heading for the second chart -->
-      <h2 class="chart-heading">Monthly Utility Cost Savings - Comparison Period 2023</h2>
-      <div id="chartdiv2" class="chart-container"></div>
+      table,
+      th,
+      td {
+        border: 0.125rem solid #cccccc; /* 2px / 16 */
+      }
+
+      th,
+      td {
+        padding: 0.625rem; /* 10px / 16 */
+        text-align: center;
+      }
+
+      th {
+        font-weight: 100;
+        background-color: #f4f4f4;
+      }
+
+      th.green {
+        font-weight: 100;
+        background-color: #28a745;
+        color: white;
+      }
+
+      th.blue {
+        font-weight: 100;
+        background-color: #007bff;
+        color: white;
+      }
+
+      th.patterned {
+        font-weight: 100;
+        background-color: white;
+        color: #40189d;
+        background-size: 0.9375rem 0.9375rem; /* 15px / 16 */
+      }
+
+      th.yellow {
+        font-weight: 100;
+        background-color: #edb50f;
+        color: #40189d;
+      }
+
+      th.totals {
+        font-weight: 100;
+        background-color: #e9ecef;
+      }
+
+      td.negative {
+        color: red;
+      }
+
+      td.totals {
+        background-color: #e9ecef;
+        font-weight: bold;
+      }
+
+      body,
+      td,
+      th {
+        color: #0e4987;
+      }
+
+      @media print {
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: Arial, sans-serif;
+        }
+
+        .container {
+          position: relative;
+          width: 100%;
+          max-width: 75rem;
+          margin: 0 auto;
+          padding: 1.25rem;
+        }
+
+        .chart-container {
+          width: 100%;
+          height: 18.75rem;
+          border: 0.125rem solid #cccccc;
+          border-radius: 0.625rem;
+          position: relative;
+        }
+
+        img.left-image {
+          width: 5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Container for the image and charts -->
+    <div class="container">
+      <div class="inner-container">
+        <div class="card-report-title">Card Report</div>
+        <!-- <img src="report_layout.png" alt="Decorative Image" class="left-image"> -->
+        <h2 class="chart-heading">Monthly Utility Cost Performance 2023</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="color: #40189d; width: 150px">Savings Achieved</th>
+              <th class="totals">TOTALS</th>
+              <th class="green">Electric (kWh)</th>
+              <th style="background-color: #ee4b1d; color: white">
+                Electric (kW) Demand
+              </th>
+              <th style="background-color: #007bff; color: white">Water</th>
+              <th class="patterned">Sewer</th>
+              <th style="background-color: #edb50f; color: white">
+                Natural Gas
+              </th>
+              <th style="color: #28a745">Electric (Others)</th>
+              <th style="color: #4c73be">Water (Others)</th>
+              <th style="color: #edb50f">N.Gas (Others)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="background-color: #17395f; color: white">
+                Recent Month's Savings
+              </td>
+              <td>$ 1,906</td>
+              <td>$ 1,770</td>
+              <td>$ 46</td>
+              <td>$ 90</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+            </tr>
+            <tr>
+              <td style="background-color: #17395f; color: white">
+                Cumulative Prior Months' Savings
+              </td>
+              <td>$ 3,386</td>
+              <td>$ 1,102</td>
+              <td>$ 416</td>
+              <td>$ 10</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+              <td class="negative">$ -53</td>
+            </tr>
+            <tr class="totals">
+              <td style="background-color: #17395f; color: white">
+                Total Savings Received To Date
+              </td>
+              <td>$ 5,291</td>
+              <td>$ 2,871</td>
+              <td>$ 462</td>
+              <td>$ 10</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+              <td class="negative">$ -53</td>
+            </tr>
+            <tr>
+              <td style="background-color: #17395f; color: white">
+                % Savings To Date
+              </td>
+              <td>5%</td>
+              <td>5%</td>
+              <td>5%</td>
+              <td>5%</td>
+              <td>5%</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+              <td>$ 0</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Heading for the first chart -->
+        <h2 class="chart-heading">Monthly Utility Cost Performance 2023</h2>
+        <div id="chartdiv1" class="chart-container"></div>
+
+        <!-- Heading for the second chart -->
+        <h2 class="chart-heading">
+          Monthly Utility Cost Savings - Comparison Period 2023
+        </h2>
+        <div id="chartdiv2" class="chart-container"></div>
+      </div>
     </div>
-  </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // First Chart (Positive Values)
-      let root1 = am5.Root.new("chartdiv1");
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // First Chart (Positive Values)
+        let root1 = am5.Root.new("chartdiv1");
 
-      root1.setThemes([am5themes_Animated.new(root1)]);
+        root1.setThemes([am5themes_Animated.new(root1)]);
 
-      let chart1 = root1.container.children.push(
-        am5xy.XYChart.new(root1, {
-          panY: false,
-          layout: root1.verticalLayout,
-          paddingTop: 100,
-          paddingBottom: -70,
-        })
-      );
+        let chart1 = root1.container.children.push(
+          am5xy.XYChart.new(root1, {
+            panY: false,
+            layout: root1.verticalLayout,
+            paddingTop: 100,
+            paddingBottom: -70,
+          })
+        );
 
-      let data1 = <%- JSON.stringify(data) %>;
+        let data1 = <%- JSON.stringify(data) %>;
 
-      let xAxis1 = chart1.xAxes.push(
-        am5xy.CategoryAxis.new(root1, {
-          categoryField: "category",
-          renderer: am5xy.AxisRendererX.new(root1, { minGridDistance: 30 }),
-        })
-      );
+        let xAxis1 = chart1.xAxes.push(
+          am5xy.CategoryAxis.new(root1, {
+            categoryField: "category",
+            renderer: am5xy.AxisRendererX.new(root1, { minGridDistance: 30 }),
+          })
+        );
 
-      // Remove inside vertical grid lines
-      xAxis1.get("renderer").grid.template.setAll({
-        visible: false,
-      });
+        // Remove inside vertical grid lines
+        xAxis1.get("renderer").grid.template.setAll({
+          visible: false,
+        });
 
-      xAxis1.data.setAll(data1);
+        xAxis1.data.setAll(data1);
 
-      let yAxis1 = chart1.yAxes.push(
-        am5xy.ValueAxis.new(root1, {
-          renderer: am5xy.AxisRendererY.new(root1, {}),
-          min: 5000, // Start y-axis from 5000
-        })
-      );
+        let yAxis1 = chart1.yAxes.push(
+          am5xy.ValueAxis.new(root1, {
+            renderer: am5xy.AxisRendererY.new(root1, {}),
+            min: 5000, // Start y-axis from 5000
+          })
+        );
 
-      function createSeries1(name, field, color, pattern = null) {
-        let series = chart1.series.push(
-          am5xy.ColumnSeries.new(root1, {
-            name: name,
+        function createSeries1(name, field, color, pattern = null) {
+          let series = chart1.series.push(
+            am5xy.ColumnSeries.new(root1, {
+              name: name,
+              xAxis: xAxis1,
+              yAxis: yAxis1,
+              valueYField: field,
+              categoryXField: "category",
+              stacked: true,
+              fill: pattern ? am5.Pattern.new(root1, { template: pattern }) : am5.color(color),
+              stroke: pattern ? am5.Pattern.new(root1, { template: pattern }) : am5.color(color),
+            })
+          );
+          series.data.setAll(data1);
+          return series;
+        }
+
+        let electricPattern1 = am5.Pattern.new(root1, {
+          pattern: am5.LinePattern.new(root1, {
+            color: am5.color(0x67b7dc),
+            width: 3,
+            height: 3,
+            strokeWidth: 1,
+            rotation: 45,
+          }),
+        });
+
+        createSeries1("Elec (kWh)", "electric", 0x4eac5b);
+        createSeries1("Water", "water", 0x2489f9);
+        createSeries1("Sewer", "sewer", 0x40189d);
+        createSeries1("Nat (Gas)", "gas", 0xffff00);
+        createSeries1("Elec (Other)", "electricOther", 0xee4b1d); // New field
+        createSeries1("Water (Other)", "waterOther", 0x64b5f6); // New field
+        createSeries1("Gas (Other)", "gasOther", 0xffff00); // New field
+        createSeries1("Other", "other", 0xdcdcdc); // New field
+
+        let lineSeries1 = chart1.series.push(
+          am5xy.LineSeries.new(root1, {
+            name: "Baseline",
             xAxis: xAxis1,
             yAxis: yAxis1,
-            valueYField: field,
+            valueYField: "baseline",
             categoryXField: "category",
-            stacked: true,
-            fill: pattern ? am5.Pattern.new(root1, { template: pattern }) : am5.color(color),
-            stroke: pattern ? am5.Pattern.new(root1, { template: pattern }) : am5.color(color),
+            stroke: am5.color(0xa7da18),
+            fill: am5.color(0x000000),
           })
         );
-        series.data.setAll(data1);
-        return series;
-      }
+        lineSeries1.data.setAll(data1);
 
-      let electricPattern1 = am5.Pattern.new(root1, {
-        pattern: am5.LinePattern.new(root1, {
-          color: am5.color(0x67b7dc),
-          width: 3,
-          height: 3,
-          strokeWidth: 1,
-          rotation: 45,
-        }),
-      });
+        lineSeries1.bullets.push(function () {
+          return am5.Bullet.new(root1, {
+            sprite: am5.Circle.new(root1, {
+              radius: 5,
+              fill: lineSeries1.get("fill"),
+            }),
+          });
+        });
 
-      createSeries1("Elec (kWh)", "electric", 0x4eac5b);
-      createSeries1("Water", "water", 0x2489f9);
-      createSeries1("Sewer", "sewer", 0x40189d);
-      createSeries1("Nat (Gas)", "gas", 0xffff00);
-      createSeries1("Elec (Other)", "electricOther", 0xee4b1d); // New field
-      createSeries1("Water (Other)", "waterOther", 0x64b5f6); // New field
-      createSeries1("Gas (Other)", "gasOther", 0xffff00); // New field
-      createSeries1("Other", "other", 0xdcdcdc); // New field
+        let legend1 = chart1.children.push(
+          am5.Legend.new(root1, {
+            centerX: am5.p0, // Align legend to the left
+            x: am5.p0, // Position the legend at the left
+            y: am5.p0,
+            centerY: am5.p100,
+            layout: root1.horizontalLayout,
+            paddingBottom: 40,
+            paddingRight: -100,
+          })
+        );
 
-      let lineSeries1 = chart1.series.push(
-        am5xy.LineSeries.new(root1, {
-          name: "Baseline",
-          xAxis: xAxis1,
-          yAxis: yAxis1,
-          valueYField: "baseline",
-          categoryXField: "category",
-          stroke: am5.color(0xa7da18),
-          fill: am5.color(0x000000),
-        })
-      );
-      lineSeries1.data.setAll(data1);
+        legend1.markerRectangles.template.setAll({
+          cornerRadiusTL: 20,
+          cornerRadiusTR: 20,
+          cornerRadiusBL: 20,
+          cornerRadiusBR: 20,
+          width: 10,
+          height: 10,
+          stroke: am5.color(0x000000), // Add border color if necessary
+        });
 
-      lineSeries1.bullets.push(function () {
-        return am5.Bullet.new(root1, {
-          sprite: am5.Circle.new(root1, {
-            radius: 5,
-            fill: lineSeries1.get("fill"),
+        legend1.markers.template.setAll({
+          width: 10,
+          padding: 0,
+          height: 10,
+          fillOpacity: 1,
+        });
+
+        legend1.itemContainers.template.setAll({
+          paddingRight: -50,
+        });
+
+        legend1.data.setAll(chart1.series.values);
+
+        chart1.set("cursor", am5xy.XYCursor.new(root1, {}));
+
+        // Second Chart (With Negative Values)
+        let root2 = am5.Root.new("chartdiv2");
+
+        root2.setThemes([am5themes_Animated.new(root2)]);
+
+        let chart2 = root2.container.children.push(
+          am5xy.XYChart.new(root2, {
+            panY: false,
+            layout: root2.verticalLayout,
+            paddingTop: 100,
+            paddingBottom: -70,
+          })
+        );
+
+        let data2 = <%- JSON.stringify(data) %>;
+
+        let xAxis2 = chart2.xAxes.push(
+          am5xy.CategoryAxis.new(root2, {
+            categoryField: "category",
+            renderer: am5xy.AxisRendererX.new(root2, { minGridDistance: 30 }),
+          })
+        );
+
+        // Remove inside vertical grid lines
+        xAxis2.get("renderer").grid.template.setAll({
+          visible: false,
+        });
+
+        xAxis2.data.setAll(data2);
+
+        let yAxis2 = chart2.yAxes.push(
+          am5xy.ValueAxis.new(root2, {
+            renderer: am5xy.AxisRendererY.new(root2, {}),
+            min: -1000, // Start y-axis from a negative value
+          })
+        );
+
+        // Make the zero line bold
+        yAxis2.get("renderer").grid.template.setAll({
+          strokeOpacity: 0.2, // Default grid line opacity
+        });
+
+        yAxis2.get("renderer").grid.template.setAll({
+          strokeWidth: 2, // Bold stroke width for all grid lines
+        });
+
+        yAxis2.get("renderer").grid.template.adapters.add("stroke", function (stroke, target) {
+          if (target.dataItem.get("value") === 0) {
+            return am5.color(0x000000); // Color for the zero line
+          }
+          return stroke;
+        });
+
+        yAxis2.get("renderer").grid.template.adapters.add("strokeWidth", function (strokeWidth, target) {
+          if (target.dataItem.get("value") === 0) {
+            return 3; // Make the zero line bolder
+          }
+          return strokeWidth;
+        });
+
+        function createSeries2(name, field, color, pattern = null) {
+          let series = chart2.series.push(
+            am5xy.ColumnSeries.new(root2, {
+              name: name,
+              xAxis: xAxis2,
+              yAxis: yAxis2,
+              valueYField: field,
+              categoryXField: "category",
+              stacked: true,
+              fill: pattern ? am5.Pattern.new(root2, { template: pattern }) : am5.color(color),
+              stroke: pattern ? am5.Pattern.new(root2, { template: pattern }) : am5.color(color),
+            })
+          );
+          series.data.setAll(data2);
+          return series;
+        }
+
+        let electricPattern2 = am5.Pattern.new(root2, {
+          pattern: am5.LinePattern.new(root2, {
+            color: am5.color(0x67b7dc),
+            width: 3,
+            height: 3,
+            strokeWidth: 1,
+            rotation: 45,
           }),
         });
-      });
 
-      let legend1 = chart1.children.push(
-        am5.Legend.new(root1, {
-          centerX: am5.p0, // Align legend to the left
-          x: am5.p0, // Position the legend at the left
-          y: am5.p0,
-          centerY: am5.p100,
-          layout: root1.horizontalLayout,
-          paddingBottom: 40,
-          paddingRight: -100,
-        })
-      );
+        createSeries2("Elec (kWh)", "electric", 0x4eac5b);
+        createSeries2("Water", "water", 0x2489f9);
+        createSeries2("Sewer", "sewer", 0x40189d);
+        createSeries2("Nat (Gas)", "gas", 0xffff00);
+        createSeries2("Elec (Other)", "electricOther", 0xee4b1d); // New field
+        createSeries2("Water (Other)", "waterOther", 0x64b5f6); // New field
+        createSeries2("Gas (Other)", "gasOther", 0xffff00); // New field
+        createSeries2("Other", "other", 0xdcdcdc); // New field
 
-      legend1.markerRectangles.template.setAll({
-        cornerRadiusTL: 20,
-        cornerRadiusTR: 20,
-        cornerRadiusBL: 20,
-        cornerRadiusBR: 20,
-        width: 10,
-        height: 10,
-        stroke: am5.color(0x000000), // Add border color if necessary
-      });
-
-      legend1.markers.template.setAll({
-        width: 10,
-        padding: 0,
-        height: 10,
-        fillOpacity: 1,
-      });
-
-      legend1.itemContainers.template.setAll({
-        paddingRight: -50,
-      });
-
-      legend1.data.setAll(chart1.series.values);
-
-      chart1.set("cursor", am5xy.XYCursor.new(root1, {}));
-
-      // Second Chart (With Negative Values)
-      let root2 = am5.Root.new("chartdiv2");
-
-      root2.setThemes([am5themes_Animated.new(root2)]);
-
-      let chart2 = root2.container.children.push(
-        am5xy.XYChart.new(root2, {
-          panY: false,
-          layout: root2.verticalLayout,
-          paddingTop: 100,
-          paddingBottom: -70,
-        })
-      );
-
-      let data2 = <%- JSON.stringify(data) %>;
-
-      let xAxis2 = chart2.xAxes.push(
-        am5xy.CategoryAxis.new(root2, {
-          categoryField: "category",
-          renderer: am5xy.AxisRendererX.new(root2, { minGridDistance: 30 }),
-        })
-      );
-
-      // Remove inside vertical grid lines
-      xAxis2.get("renderer").grid.template.setAll({
-        visible: false,
-      });
-
-      xAxis2.data.setAll(data2);
-
-      let yAxis2 = chart2.yAxes.push(
-        am5xy.ValueAxis.new(root2, {
-          renderer: am5xy.AxisRendererY.new(root2, {}),
-          min: -1000, // Start y-axis from a negative value
-        })
-      );
-
-      // Make the zero line bold
-      yAxis2.get("renderer").grid.template.setAll({
-        strokeOpacity: 0.2, // Default grid line opacity
-      });
-
-      yAxis2.get("renderer").grid.template.setAll({
-        strokeWidth: 2, // Bold stroke width for all grid lines
-      });
-
-      yAxis2.get("renderer").grid.template.adapters.add("stroke", function (stroke, target) {
-        if (target.dataItem.get("value") === 0) {
-          return am5.color(0x000000); // Color for the zero line
-        }
-        return stroke;
-      });
-
-      yAxis2.get("renderer").grid.template.adapters.add("strokeWidth", function (strokeWidth, target) {
-        if (target.dataItem.get("value") === 0) {
-          return 3; // Make the zero line bolder
-        }
-        return strokeWidth;
-      });
-
-      function createSeries2(name, field, color, pattern = null) {
-        let series = chart2.series.push(
-          am5xy.ColumnSeries.new(root2, {
-            name: name,
+        let lineSeries2 = chart2.series.push(
+          am5xy.LineSeries.new(root2, {
+            name: "Baseline",
             xAxis: xAxis2,
             yAxis: yAxis2,
-            valueYField: field,
+            valueYField: "baseline",
             categoryXField: "category",
-            stacked: true,
-            fill: pattern ? am5.Pattern.new(root2, { template: pattern }) : am5.color(color),
-            stroke: pattern ? am5.Pattern.new(root2, { template: pattern }) : am5.color(color),
+            stroke: am5.color(0xa7da18),
+            fill: am5.color(0x000000),
           })
         );
-        series.data.setAll(data2);
-        return series;
-      }
+        lineSeries2.data.setAll(data2);
 
-      let electricPattern2 = am5.Pattern.new(root2, {
-        pattern: am5.LinePattern.new(root2, {
-          color: am5.color(0x67b7dc),
-          width: 3,
-          height: 3,
-          strokeWidth: 1,
-          rotation: 45,
-        }),
-      });
-
-      createSeries2("Elec (kWh)", "electric", 0x4eac5b);
-      createSeries2("Water", "water", 0x2489f9);
-      createSeries2("Sewer", "sewer", 0x40189d);
-      createSeries2("Nat (Gas)", "gas", 0xffff00);
-      createSeries2("Elec (Other)", "electricOther", 0xee4b1d); // New field
-      createSeries2("Water (Other)", "waterOther", 0x64b5f6); // New field
-      createSeries2("Gas (Other)", "gasOther", 0xffff00); // New field
-      createSeries2("Other", "other", 0xdcdcdc); // New field
-
-      let lineSeries2 = chart2.series.push(
-        am5xy.LineSeries.new(root2, {
-          name: "Baseline",
-          xAxis: xAxis2,
-          yAxis: yAxis2,
-          valueYField: "baseline",
-          categoryXField: "category",
-          stroke: am5.color(0xa7da18),
-          fill: am5.color(0x000000),
-        })
-      );
-      lineSeries2.data.setAll(data2);
-
-      lineSeries2.bullets.push(function () {
-        return am5.Bullet.new(root2, {
-          sprite: am5.Circle.new(root2, {
-            radius: 5,
-            fill: lineSeries2.get("fill"),
-          }),
+        lineSeries2.bullets.push(function () {
+          return am5.Bullet.new(root2, {
+            sprite: am5.Circle.new(root2, {
+              radius: 5,
+              fill: lineSeries2.get("fill"),
+            }),
+          });
         });
+
+        let legend2 = chart2.children.push(
+          am5.Legend.new(root2, {
+            centerX: am5.p0, // Align legend to the left
+            x: am5.p0, // Position the legend at the left
+            y: am5.p0,
+            centerY: am5.p100,
+            layout: root2.horizontalLayout,
+            paddingBottom: 40,
+            paddingRight: -100,
+          })
+        );
+
+        legend2.markerRectangles.template.setAll({
+          cornerRadiusTL: 20,
+          cornerRadiusTR: 20,
+          cornerRadiusBL: 20,
+          cornerRadiusBR: 20,
+          width: 10,
+          height: 10,
+          stroke: am5.color(0x000000), // Add border color if necessary
+        });
+
+        legend2.markers.template.setAll({
+          width: 10,
+          padding: 0,
+          height: 10,
+          fillOpacity: 1,
+        });
+
+        legend2.itemContainers.template.setAll({
+          paddingRight: -50,
+        });
+
+        legend2.data.setAll(chart2.series.values);
+
+        chart2.set("cursor", am5xy.XYCursor.new(root2, {}));
       });
-
-      let legend2 = chart2.children.push(
-        am5.Legend.new(root2, {
-          centerX: am5.p0, // Align legend to the left
-          x: am5.p0, // Position the legend at the left
-          y: am5.p0,
-          centerY: am5.p100,
-          layout: root2.horizontalLayout,
-          paddingBottom: 40,
-          paddingRight: -100,
-        })
-      );
-
-      legend2.markerRectangles.template.setAll({
-        cornerRadiusTL: 20,
-        cornerRadiusTR: 20,
-        cornerRadiusBL: 20,
-        cornerRadiusBR: 20,
-        width: 10,
-        height: 10,
-        stroke: am5.color(0x000000), // Add border color if necessary
-      });
-
-      legend2.markers.template.setAll({
-        width: 10,
-        padding: 0,
-        height: 10,
-        fillOpacity: 1,
-      });
-
-      legend2.itemContainers.template.setAll({
-        paddingRight: -50,
-      });
-
-      legend2.data.setAll(chart2.series.values);
-
-      chart2.set("cursor", am5xy.XYCursor.new(root2, {}));
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

@@ -107,9 +107,61 @@ const chartData = [
     other: 800,
     baseline: 9000,
   },
+  {
+    category: "Oct 2023",
+    electric: 12000,
+    electricOther: 3000,
+    water: 2000,
+    waterOther: 600,
+    sewer: -1500, // Negative value
+    gas: 3500,
+    gasOther: 900,
+    other: 800,
+    baseline: 9000,
+  },
+
+  {
+    category: "Sep 2023",
+    electric: 12000,
+    electricOther: 3000,
+    water: 2000,
+    waterOther: 600,
+    sewer: -1500, // Negative value
+    gas: 3500,
+    gasOther: 900,
+    other: 800,
+    baseline: 9000,
+  },
+
+  {
+    category: "Nov 2023",
+    electric: 12000,
+    electricOther: 3000,
+    water: 2000,
+    waterOther: 600,
+    sewer: -1500, // Negative value
+    gas: 3500,
+    gasOther: 900,
+    other: 800,
+    baseline: 9000,
+  },
+
+  {
+    category: "Dec 2023",
+    electric: 12000,
+    electricOther: 3000,
+    water: 2000,
+    waterOther: 600,
+    sewer: -1500, // Negative value
+    gas: 3500,
+    gasOther: 900,
+    other: 800,
+    baseline: 9000,
+  },
   // Add more data as needed
 ];
 
+// Route to render the chart
 // Route to render the chart
 app.get("/chart", (req, res) => {
   res.render("chart", { data: chartData });
@@ -124,8 +176,6 @@ app.get("/download-pdf", async (req, res) => {
       { data: chartData }
     );
 
-    // console.log('html', htmlContent)
-
     // Launch Puppeteer
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -133,25 +183,15 @@ app.get("/download-pdf", async (req, res) => {
     // Set the content of the page to the rendered HTML
     await page.setContent(htmlContent, { waitUntil: "networkidle0" });
 
-    // Set the viewport to the desired size (optional)
-    await page.setViewport({ width: 1280, height: 1024 });
+ 
 
-    // Take a screenshot
-    const screenshotPath = path.join(
-      __dirname,
-      "output",
-      "chart_screenshot.png"
-    );
-    await page.screenshot({ path: screenshotPath, fullPage: true });
-
-    // Create a PDF from the screenshot
+    // Generate PDF
     const pdfPath = path.join(__dirname, "output", "chart.pdf");
-    const pdfBuffer = await page.pdf({
+    await page.pdf({
       format: "A4",
       printBackground: true,
+      path: pdfPath, // Save the PDF to the output folder
     });
-
-    await fs.promises.writeFile(pdfPath, pdfBuffer);
 
     await browser.close();
 
