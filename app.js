@@ -199,7 +199,7 @@ app.get("/download-pdf", async (req, res) => {
     // Generate PDF
     const pdfPath = path.join(__dirname, "output", "chart.pdf");
     await page.pdf({
-      format: "A4",
+      format: "A3",
       printBackground: true,
       path: pdfPath, // Save the PDF to the output folder
     });
