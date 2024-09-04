@@ -12,7 +12,7 @@ app.use(express.static("public")); // Serve static files like CSS
 // Sample data (this can be replaced by API data or database queries)
 const chartData = [
   {
-    category: "Jan 2023",
+    category: "Jan",
     electric: 20000,
     electricOther: -10000, // Negative value
     water: 3000,
@@ -24,7 +24,7 @@ const chartData = [
     baseline: 15000,
   },
   {
-    category: "Feb 2023",
+    category: "Feb",
     electric: 15000,
     electricOther: 4000,
     water: -2500, // Negative value
@@ -36,7 +36,7 @@ const chartData = [
     baseline: 13000,
   },
   {
-    category: "Mar 2023",
+    category: "Mar",
     electric: -18000, // Negative value
     electricOther: 4500,
     water: 2700,
@@ -48,7 +48,7 @@ const chartData = [
     baseline: 14000,
   },
   {
-    category: "Apr 2023",
+    category: "Apr",
     electric: 16000,
     electricOther: -4200, // Negative value
     water: 2400,
@@ -60,7 +60,7 @@ const chartData = [
     baseline: 12000,
   },
   {
-    category: "May 2023",
+    category: "May",
     electric: 17000,
     electricOther: 4300,
     water: 2600,
@@ -72,7 +72,7 @@ const chartData = [
     baseline: 13500,
   },
   {
-    category: "Jun 2023",
+    category: "Jun",
     electric: -20000, // Negative value
     electricOther: 4700,
     water: 2800,
@@ -84,7 +84,7 @@ const chartData = [
     baseline: 15000,
   },
   {
-    category: "Jul 2023",
+    category: "Jul",
     electric: 19000,
     electricOther: -4800, // Negative value
     water: 2900,
@@ -96,7 +96,7 @@ const chartData = [
     baseline: 16000,
   },
   {
-    category: "Aug 2023",
+    category: "Aug",
     electric: 12000,
     electricOther: 3000,
     water: 2000,
@@ -108,20 +108,7 @@ const chartData = [
     baseline: 9000,
   },
   {
-    category: "Oct 2023",
-    electric: 12000,
-    electricOther: 3000,
-    water: 2000,
-    waterOther: 600,
-    sewer: -1500, // Negative value
-    gas: 3500,
-    gasOther: 900,
-    other: 800,
-    baseline: 9000,
-  },
-
-  {
-    category: "Sep 2023",
+    category: "Oct",
     electric: 12000,
     electricOther: 3000,
     water: 2000,
@@ -134,7 +121,7 @@ const chartData = [
   },
 
   {
-    category: "Nov 2023",
+    category: "Sep",
     electric: 12000,
     electricOther: 3000,
     water: 2000,
@@ -147,7 +134,20 @@ const chartData = [
   },
 
   {
-    category: "Dec 2023",
+    category: "Nov",
+    electric: 12000,
+    electricOther: 3000,
+    water: 2000,
+    waterOther: 600,
+    sewer: -1500, // Negative value
+    gas: 3500,
+    gasOther: 900,
+    other: 800,
+    baseline: 9000,
+  },
+
+  {
+    category: "Dec",
     electric: 12000,
     electricOther: 3000,
     water: 2000,
@@ -183,7 +183,18 @@ app.get("/download-pdf", async (req, res) => {
     // Set the content of the page to the rendered HTML
     await page.setContent(htmlContent, { waitUntil: "networkidle0" });
 
- 
+    // Ensure the image path is correct
+    await page.addStyleTag({
+      content: `
+      img.left-image {
+        content: url('file://${path.join(
+          __dirname,
+          "public",
+          "report_layout.png"
+        )}');
+      }
+      `,
+    });
 
     // Generate PDF
     const pdfPath = path.join(__dirname, "output", "chart.pdf");
